@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>株式会社Wiz27新卒向け　ビジネスマナー練習ポータル</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0f172a;
+            --navy-light: #1e293b;
+            --gold: #c5a880;
+            --gold-hover: #b39770;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --success: #0d9488;
+            --danger: #e11d48;
+            --border: #e2e8f0;
+            --seat-bg: #eff6ff;
+            --seat-border: #3b82f6;
+            --seat-text: #1e40af;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Noto Sans JP', "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .serif { font-family: 'Noto Serif JP', serif; }
+        
+        /* Header */
+        .header {
+            background-color: var(--navy);
+            color: var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+        }
+        
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+        
+        .header-title {
+            font-size: 1.05rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        .header-back-btn {
+            background: rgba(197, 168, 128, 0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+        
+        .header-back-btn:hover {
+            background: var(--gold);
+            color: var(--navy);
+        }
+        
+        .header-back-btn.hidden {
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .dummy-space { width: 85px; }
+
+        .container {
+            max-width: 760px;
+            margin: 24px auto 60px;
+            padding: 0 16px;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 32px 24px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        
+        .screen.hidden { display: none; }
+        
+        h2 { font-size: 1.35rem; color: var(--navy); margin-bottom: 12px; font-weight: 700; }
+        p { color: var(--text-light); margin-bottom: 20px; }
+        
+        /* Alert Banner */
+        .alert-banner {
+            background-color: #fff1f2;
+            border: 1.5px solid #fecdd3;
+            color: var(--danger);
+            font-weight: 700;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-size: 0.98rem;
+            text-align: center;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        /* Course Cards */
+        .course-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 10px;
+        }
+
+        .course-card {
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            text-align: left;
+            position: relative;
+            z-index: 10;
+        }
+
+        .course-card.active {
+            border-color: var(--gold);
+            box-shadow: 0 4px 14px rgba(197, 168, 128, 0.15);
+        }
+
+        .course-card.active:hover {
+            transform: translateY(-2px);
+            border-color: var(--gold-hover);
+        }
+
+        .course-card.disabled {
+            background: #f8fafc;
+            border-color: #e2e8f0;
+            opacity: 0.65;
+        }
+
+        .course-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        .badge-active { background: #fef3c7; color: #b45309; }
+        .badge-disabled { background: #e2e8f0; color: #64748b; }
+
+        .course-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .course-desc {
+            font-size: 0.88rem;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            letter-spacing: 0.02em;
+            width: 100%;
+            position: relative;
+            z-index: 20;
+        }
+        
+        .btn:active { transform: translateY(1px); }
+        
+        .btn-gold {
+            background-color: var(--gold);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(197, 168, 128, 0.3);
+        }
+        .btn-gold:hover { background-color: var(--gold-hover); }
+        
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .btn-outline:hover { background-color: rgba(197, 168, 128, 0.08); }
+        
+        .btn-navy {
+            background-color: var(--navy);
+            color: #fff;
+        }
+        .btn-navy:hover { background-color: var(--navy-light); }
+
+        .btn-disabled {
+            background-color: #cbd5e1;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+        
+        /* Quiz UI */
+        .quiz-header-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .btn-inline-back {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            color: var(--navy);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+        .btn-inline-back:hover {
+            border-color: var(--navy);
+            background: #e2e8f0;
+        }
+        
+        .progress-container { flex-grow: 1; text-align: right; }
+        .progress-text { font-size: 0.85rem; font-weight: 700; color: var(--gold); letter-spacing: 0.05em; }
+        .progress-bar-bg { background: var(--border); height: 4px; border-radius: 2px; margin-top: 6px; overflow: hidden; }
+        .progress-bar-fill { background: var(--gold); height: 100%; width: 0%; transition: width 0.3s ease; }
+        
+        .question-title-tag {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--gold-hover);
+            background: #fef3c7;
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .question-text { 
+            font-size: 1.15rem; 
+            font-weight: 700; 
+            color: var(--navy); 
+            margin-bottom: 20px; 
+            line-height: 1.6; 
+        }
+
+        /* Dynamic Visual Diagram Component Styling */
+        .diagram-card {
+            background: #f1f5f9;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagram-box {
+            width: 100%;
+            max-width: 440px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+            font-size: 0.88rem;
+        }
+
+        .seat-item {
+            background-color: var(--seat-bg);
+            border: 2px solid var(--seat-border);
+            color: var(--seat-text);
+            font-weight: 700;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            min-height: 38px;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .seat-item.label-only {
+            background-color: #f1f5f9;
+            border: 1px dashed #94a3b8;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .table-item {
+            background-color: #fef3c7;
+            border: 2px solid #f59e0b;
+            color: #92400e;
+            font-weight: 700;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin: 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .door-tag {
+            background: #e2e8f0;
+            border: 1px solid #94a3b8;
+            color: #334155;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .wall-tag {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 700;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 2px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option-item:hover {
+            border-color: var(--gold);
+            background-color: rgba(197, 168, 128, 0.04);
+            transform: translateX(4px);
+        }
+        
+        .option-item.selected-correct {
+            border-color: var(--success);
+            background-color: #f0fdf4;
+        }
+
+        .option-item.selected-wrong {
+            border-color: var(--danger);
+            background-color: #fff1f2;
+        }
+
+        .option-item.correct-answer {
+            border-color: var(--success);
+            background-color: #f0fdf4;
+            border-width: 2px;
+        }
+        
+        .option-label {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            background-color: var(--bg);
+            color: var(--text-light);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; font-weight: 700;
+            margin-right: 16px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .option-item:hover .option-label { background-color: var(--gold); color: #fff; }
+        .option-item.selected-correct .option-label, .option-item.correct-answer .option-label { background-color: var(--success); color: #fff; }
+        .option-item.selected-wrong .option-label { background-color: var(--danger); color: #fff; }
+        .option-text { font-size: 1rem; font-weight: 500; color: var(--text-main); }
+        
+        /* Instant Feedback UI */
+        .feedback-box {
+            display: none;
+            margin-top: 24px;
+            padding: 20px;
+            border-radius: 8px;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-box.correct {
+            background-color: #f0fdf4;
+            border: 1.5px solid #86efac;
+        }
+
+        .feedback-box.wrong {
+            background-color: #fff1f2;
+            border: 1.5px solid #fecdd3;
+        }
+
+        .feedback-header {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-box.correct .feedback-header { color: var(--success); }
+        .feedback-box.wrong .feedback-header { color: var(--danger); }
+
+        .feedback-desc {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+
+        /* Result & Review UI */
+        .score-display { font-size: 3.8rem; color: var(--navy); line-height: 1; margin: 10px 0 16px; }
+        .score-display span { font-size: 1.4rem; color: var(--text-light); }
+        
+        .action-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            text-align: left;
+            background: #fff;
+        }
+        .action-card h3 { font-size: 1.05rem; color: var(--navy); margin-bottom: 6px; }
+        .action-card p { font-size: 0.88rem; margin-bottom: 14px; line-height: 1.5; }
+        
+        .review-item {
+            padding-bottom: 28px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border);
+        }
+        .review-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
+        .status-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; color: white;
+            margin-bottom: 12px; letter-spacing: 0.05em;
+        }
+        .status-correct { background-color: var(--success); }
+        .status-wrong { background-color: var(--danger); }
+        
+        .exp-box {
+            background-color: var(--bg);
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 14px;
+            border-left: 4px solid var(--gold);
+        }
+        .exp-row { margin-bottom: 12px; font-size: 0.92rem; display: flex; align-items: flex-start; gap: 8px; }
+        .exp-row:last-child { margin-bottom: 0; }
+        
+        .exp-icon { flex-shrink: 0; font-weight: bold; width: 22px; }
+        .icon-correct { color: var(--success); }
+        .icon-wrong { color: var(--danger); }
+        .icon-neutral { color: var(--text-light); }
+        
+        .exp-content { color: var(--text-main); }
+        .exp-desc { display: block; font-size: 0.85rem; color: var(--text-light); margin-top: 3px; white-space: pre-wrap; }
+        
+        .text-center { text-align: center; }
+        @media (max-width: 600px) {
+            .card { padding: 24px 16px; }
+            .header-title { font-size: 0.95rem; }
+            .header-back-btn { padding: 4px 8px; font-size: 0.8rem; }
+            .dummy-space { width: 65px; }
+        }
+    
+        /* Netlify ツールバー・バナーの強制非表示 */
+        iframe[src*="netlify"],
+        #netlify-drawer,
+        .netlify-container,
+        #netlify-modal-drop {
+            display: none !important;
+            visibility: hidden !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <button id="btn-back" class="header-back-btn hidden" type="button" onclick="window.goToPortal()">
+                ← トップへ
+            </button>
+            <div class="header-title serif" id="header-title-text">株式会社Wiz27新卒向け　ビジネスマナー練習ポータル</div>
+            <div class="dummy-space" id="dummy-space"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- Portal Screen -->
+        <div id="portal-screen" class="screen card text-center">
+            <div style="width: 52px; height: 52px; background: var(--navy); color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
+            </div>
+            <h2 class="serif">株式会社Wiz27新卒向け<br>ビジネスマナー練習ポータル</h2>
+            
+            <!-- Alert Banner -->
+            <div class="alert-banner">
+                10月のビジネスマナーテストも8割以上で合格です。頑張ろう！
+            </div>
+
+            <p style="margin-bottom: 16px; font-weight: 500;">受講するコースを選択してください：</p>
+
+            <div class="course-grid">
+                <!-- Course 1 -->
+                <div class="course-card active">
+                    <span class="course-badge badge-active">第1回：9月（実施済み）</span>
+                    <div class="course-title">第一回：基礎敬語トレーニング</div>
+                    <div class="course-desc">全20問の敬語データベースからランダムに10問出題。ビジネスで必須の敬語マナーをマスターします。</div>
+                    <button class="btn btn-gold" type="button" onclick="window.selectCourse('keigo')">敬語 練習問題を開始する</button>
+                </div>
+
+                <!-- Course 2 -->
+                <div class="course-card active">
+                    <span class="course-badge badge-active">第2回：10月</span>
+                    <div class="course-title">第二回：上座下座ビジネスマナー</div>
+                    <div class="course-desc">全20問の上座下座データベースからイラスト図解付きで10問出題。応接室や車内の席順をマスターします。</div>
+                    <button class="btn btn-gold" type="button" onclick="window.selectCourse('kamiza')">上座下座 練習問題を開始する</button>
+                </div>
+
+                <!-- Course 3 -->
+                <div class="course-card disabled">
+                    <span class="course-badge badge-disabled">第3回：11月</span>
+                    <div class="course-title">第三回：coming soon...</div>
+                    <div class="course-desc">今後公開予定のトレーニングコースです。次回研修までお待ちください。</div>
+                    <button class="btn btn-disabled" type="button" disabled>準備中</button>
+                </div>
+
+                <!-- Course 4 -->
+                <div class="course-card disabled">
+                    <span class="course-badge badge-disabled">第4回：12月</span>
+                    <div class="course-title">第四回：coming soon...</div>
+                    <div class="course-desc">今後公開予定のトレーニングコースです。次回研修までお待ちください。</div>
+                    <button class="btn btn-disabled" type="button" disabled>準備中</button>
+                </div>
+
+                <!-- Course 5 -->
+                <div class="course-card disabled">
+                    <span class="course-badge badge-disabled">第5回：1月</span>
+                    <div class="course-title">第五回：coming soon...</div>
+                    <div class="course-desc">今後公開予定のトレーニングコースです。次回研修までお待ちください。</div>
+                    <button class="btn btn-disabled" type="button" disabled>準備中</button>
+                </div>
+
+                <!-- Course 6 -->
+                <div class="course-card disabled">
+                    <span class="course-badge badge-disabled">第6回：2月</span>
+                    <div class="course-title">第六回：coming soon...</div>
+                    <div class="course-desc">今後公開予定のトレーニングコースです。次回研修までお待ちください。</div>
+                    <button class="btn btn-disabled" type="button" disabled>準備中</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen card hidden">
+            <div class="quiz-header-bar">
+                <button id="btn-quiz-back" class="btn-inline-back" type="button" onclick="window.goBack()">
+                    ← 戻る
+                </button>
+                <div class="progress-container">
+                    <div class="progress-text" id="quiz-progress-text">QUESTION 01 / 10</div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="quiz-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="question-tag-box"></div>
+            <div class="question-text serif" id="question-text"></div>
+            <div id="diagram-container"></div>
+            
+            <div class="options-list" id="options-container"></div>
+            
+            <!-- Instant Feedback Box -->
+            <div id="instant-feedback-box" class="feedback-box">
+                <div class="feedback-header" id="feedback-header">
+                    <!-- ✓ 正解 または ✗ 不正解 が入る -->
+                </div>
+                <div class="feedback-desc" id="feedback-desc">
+                    <!-- 解説テキストが入る -->
+                </div>
+                <button class="btn btn-navy" id="btn-next-question" type="button">次の問題へ進む</button>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen card text-center hidden">
+            <h2 class="serif">TEST RESULT</h2>
+            <div class="score-display serif" id="score-display">0<span>/10</span></div>
+            <p id="result-message" style="font-size: 1.05rem; color: var(--navy); font-weight: 500;"></p>
+            
+            <div style="height: 1px; background: var(--border); margin: 28px 0;"></div>
+            
+            <h3 style="font-size: 1.05rem; color: var(--text-light); margin-bottom: 18px;">次のステップを選択してください</h3>
+            
+            <div class="action-card" id="action-wrong-card">
+                <h3>1. 間違えた問題のみを復習する</h3>
+                <p>今回間違えた問題だけを再度出題し、弱点を克服します。</p>
+                <button class="btn btn-outline" type="button" onclick="window.startTest('wrong')">間違えた問題を解き直す</button>
+            </div>
+            
+            <div class="action-card">
+                <h3>2. もう一度テストを受ける</h3>
+                <p>全20問から新たな10問をランダムに出題し、実力を試します。</p>
+                <button class="btn btn-navy" type="button" onclick="window.startTest('random')">新たな10問で再テスト</button>
+            </div>
+            
+            <div class="action-card">
+                <h3>3. すべての問題を復習する</h3>
+                <p>今回出題された全問の解答と「なぜ違うのか」の詳細な解説を確認します。</p>
+                <button class="btn btn-gold" type="button" onclick="window.pushState('review-screen')">全問の解答と解説を見る</button>
+            </div>
+        </div>
+
+        <!-- Review Screen -->
+        <div id="review-screen" class="screen card hidden">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                <button class="btn-inline-back" type="button" onclick="window.goBack()">
+                    ← 結果画面に戻る
+                </button>
+                <h2 class="serif" style="margin: 0; font-size: 1.25rem;">解答と解説</h2>
+                <div style="width: 80px;"></div>
+            </div>
+            
+            <div id="review-container"></div>
+            
+            <div class="text-center" style="margin-top: 36px;">
+                <button class="btn btn-outline" style="max-width: 280px;" type="button" onclick="window.goToPortal()">コース一覧に戻る</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. 第一回 敬語データベース ---
+        const keigoDB = [{"q": "自分の会社を社外の人に言うときの正しい表現はどれですか？", "options": ["弊社", "御社", "貴社", "当社"], "answer": 0, "explanations": ["【正解】社外の人に対して、自分の会社をへりくだって言うときは「弊社」を使います。", "【不正解】話し言葉で相手の会社を指す敬語（尊敬語）です。", "【不正解】書き言葉（メールや手紙）で相手の会社を指す敬語です。", "【不正解】社内での説明や、契約書など対等な立場で自社を指す言葉です。"]}, {"q": "話し言葉で、相手の会社を指すときの正しい表現はどれですか？", "options": ["御社", "貴社", "弊社", "当社"], "answer": 0, "explanations": ["【正解】面接や電話など、話し言葉で相手の会社を指すときは「御社（おんしゃ）」を使います。", "【不正解】メールや文書など書き言葉で相手の会社を指す言葉です。", "【不正解】自分の会社をへりくだって言う言葉です。", "【不正解】自社を指す言葉です。"]}, {"q": "上司や取引先に「わかりました」と伝えるときの正しい表現はどれですか？", "options": ["承知いたしました", "了解しました", "承知です。", "了承いたしました"], "answer": 0, "explanations": ["【正解】目上の人や取引先には「承知いたしました」や「かしこまりました」を使います。", "【不正解】「了解」は同僚や目下の人に対して指示・申請を認める際に使う言葉です。", "【不正解】「承知」に「です」をつけるだけでは丁寧さに欠け、不自然な言い回しです。", "【不正解】「了承」は目上の人が部下の申し出を認める際に使う言葉です。"]}, {"q": "相手に謝罪するときの正しい表現はどれですか？", "options": ["申し訳ございません", "すいません", "ごめんなさい", "許してください"], "answer": 0, "explanations": ["【正解】ビジネスシーンでの謝罪は「申し訳ございません」や「申し訳ありません」が基本です。", "【不正解】口語の略語であり、カジュアルすぎるためビジネスの謝罪には不適切です。", "【不正解】親しい友人や家族間で使う表現です。", "【不正解】感情的な懇願であり、敬語ではありません。"]}, {"q": "電話などで「少し待ってください」と伝えるときの正しい表現はどれですか？", "options": ["少々お待ちください", "ちょっと待ってください", "待っていただけますか", "お待ち願います"], "answer": 0, "explanations": ["【正解】「少々お待ちください（ませ）」が正しい敬語表現です。", "【不正解】「ちょっと」は話し言葉として雑な印象を与えるため「少々」を使います。", "【不正解】丁寧な依頼ですが、お客様や取引先を保留・案内する場面では「少々お待ちください」が適切です。", "【不正解】「願います」は命令形に近く、上から目線のニュアンスが含まれます。"]}, {"q": "相手の名前を聞くときの正しい表現はどれですか？", "options": ["お名前を伺ってもよろしいでしょうか", "お名前は何ですか", "お名前を教えてください", "お名前を頂戴できますか"], "answer": 0, "explanations": ["【正解】「聞く」の謙譲語「伺う」を使い、クッション言葉を添えるのが最も丁寧です。", "【不正解】直接的すぎて尋問のような不躾な印象を与えます。", "【不正解】悪くはありませんが、目上の人には「教えて」より「お伺いする」を使うのが勝ります。", "【不正解】「頂戴する」は物品をもらう謙譲語であり、名前をもらうことはできないため誤用です。"]}, {"q": "電話で名指しされた上司（田中）が不在のとき、相手への正しい伝え方はどれですか？", "options": ["田中は席を外しております", "田中部長は席を外しております", "田中さんは席を外しております", "田中様は席を外しております"], "answer": 0, "explanations": ["【正解】社外の人に対しては、自分の会社の人間には役職や敬称をつけず、呼び捨てにするのがマナーです。", "【不正解】役職名も敬称にあたるため、社外の人に対して自社の人間に付けるのはNGです。", "【不正解】「さん」は敬称なので、社外の人に対して自社の社員に使ってはいけません。", "【不正解】自社の身内に「様」をつけるのは不適切です。"]}, {"q": "取引先に「（私が）行きます」と伝えるときの正しい表現はどれですか？", "options": ["お伺いします", "行かせていただきます", "参られます", "お越しになります"], "answer": 0, "explanations": ["【正解】「行く」の謙譲語は「伺う」「参る」です。「お伺いします」や「参ります」を使います。", "【不正解】単に訪問する通知としてはやや冗長で不自然です。", "【不正解】謙譲語の「参る」に尊敬の「られる」を重ねた誤った表現です。", "【不正解】「お越しになる」は相手が来る（来るの尊敬語）場合に使います。"]}, {"q": "取引先から受け取った資料を「見ます」と伝えるときの正しい表現はどれですか？", "options": ["拝見いたします", "見させていただきます", "ご覧になります", "拝読させていただきます"], "answer": 0, "explanations": ["【正解】「見る」の謙譲語は「拝見する」です。", "【不正解】「さ入れ言葉」になりがちで、やや回りくどい印象を与えます。", "【不正解】「ご覧になる」は尊敬語なので、相手が見る場合に使います。", "【不正解】「拝読」は文章を読む場合の謙譲語です。資料全体を見る場合は「拝見」が適しています。"]}, {"q": "お客様に資料を「見てください」とお願いするときの正しい表現はどれですか？", "options": ["ご覧ください", "拝見してください", "見てやってください", "お見せになってください"], "answer": 0, "explanations": ["【正解】「見る」の尊敬語である「ご覧になる」を使い、「ご覧ください（ませ）」とします。", "【不正解】「拝見する」は自分がへりくだる謙譲語なので、相手に命じるのは誤りです。", "【不正解】身内（部下など）を紹介する際の口語表現であり、顧客に使うのは失礼です。", "【不正解】日本語として不自然な言い回しです。"]}, {"q": "「私がやります」と伝えるときの正しい表現はどれですか？", "options": ["私がいたします", "私がやらせていただきます", "私がなさいます", "私がやられます"], "answer": 0, "explanations": ["【正解】「する」の謙譲語「いたす」を使います。", "【不正解】相手の許可を得て行う大げさなニュアンスが出るため、「いたします」がよりスマートです。", "【不正解】「なさる」は相手がする時の尊敬語です。自分に使ってはいけません。", "【不正解】不自然な尊敬表現または受身です。"]}, {"q": "電話を「後でかけ直します」と伝えるときの正しい表現はどれですか？", "options": ["のちほど折り返しお電話いたします", "後でお電話します（電話いたします）", "折り返しお電話してあげます", "あとでかけ直させていただきます"], "answer": 0, "explanations": ["【正解】「後で」を「のちほど」と言い換え、「かけ直す」を「折り返す」と表現すると非常に丁寧でスマートです。", "【不正解】日常会話的でビジネスの電話対応としては丁寧さが不足しています。", "【不正解】「〜してあげる」は恩着せがましく上から目線です。", "【不正解】「かけ直す」より「折り返す」の方が一般的で簡潔です。"]}, {"q": "会社で電話に出るときの第一声として正しいものはどれですか？", "options": ["お電話ありがとうございます、〇〇株式会社です", "もしもし、〇〇株式会社です", "はい、〇〇株式会社です", "〇〇株式会社でございます、もしもし"], "answer": 0, "explanations": ["【正解】ビジネスの電話では、まず感謝を伝え、会社名（または部署名）を名乗るのが基本です。", "【不正解】ビジネスシーンで「もしもし」はマナー違反とされています。", "【不正解】「はい」だけでは無愛想な印象を与えてしまいます。", "【不正解】ビジネス電話で「もしもし」は使用しません。"]}, {"q": "品物などを「もらいました」と伝えるときの正しい表現はどれですか？", "options": ["頂戴いたしました", "もらわせていただきました", "拝見しました。", "拝受されました"], "answer": 0, "explanations": ["【正解】「もらう」の謙譲語は「頂戴（ちょうだい）する」または「いただく」です。", "【不正解】不自然で回りくどい表現です。", "【不正解】「拝見」は見る意味であり、「もらう」意味ではありません。", "【不正解】「拝受する」は謙譲語ですが、「〜される」と尊敬がつくと矛盾します。"]}, {"q": "相手に書類などの「確認をお願いします」と伝えるときの正しい表現はどれですか？", "options": ["ご確認のほどよろしくお願いいたします", "確認してください", "ご確認してください", "確認をお願いしたいです"], "answer": 0, "explanations": ["【正解】「確認」に「ご」をつけ、「〜のほど」を添えることで、相手に強制しない柔らかく丁寧な表現になります。", "【不正解】指示・命令のニュアンスが強く失礼になります。", "【不正解】「ご〜する」は自分がへりくだる謙譲語なので、相手の動作に使うのは誤りです（正しくは「ご確認ください」）。", "【不正解】感情的・子供っぽい印象になります。"]}, {"q": "来客に「何を飲みますか」と尋ねるときの正しい表現はどれですか？", "options": ["お飲み物は何になさいますか", "何を飲まれますか", "お飲み物は何にしますか", "お飲み物は何を頂戴しますか"], "answer": 0, "explanations": ["【正解】「する」の尊敬語である「なさる」を使い、丁寧にお伺いします。", "【不正解】間違いではありませんが、「何になさいますか」の方が上品です。", "【不正解】尊敬語が含まれておらずカジュアルすぎます。", "【不正解】「頂戴する」は自分がもらう謙譲語なので意味が不成立です。"]}, {"q": "上司がご飯を「食べる」ことを表現する正しい敬語はどれですか？", "options": ["召し上がる", "いただかれる", "お食べになる", "頂戴する"], "answer": 0, "explanations": ["【正解】「食べる」「飲む」の尊敬語は「召し上がる」です。", "【不正解】「いただく」は謙譲語なので尊敬の「れる」を重ねるのは誤りです。", "【不正解】文法的には尊敬語ですが、通常「召し上がる」を使います。", "【不正解】「頂戴する」は自分がもらう・食べる謙譲語です。"]}, {"q": "自分の名前を名乗る（「〇〇と言います」）ときの正しい表現はどれですか？", "options": ["〇〇と申します", "〇〇と申し上げます", "〇〇とおっしゃいます", "〇〇と名乗ります"], "answer": 0, "explanations": ["【正解】「言う」の謙譲語である「申す」を使います。", "【不正解】敬意の対象がある場合（お礼を申し上げる等）に使います。", "【不正解】「おっしゃる」は相手の動作の尊敬語です。", "【不正解】敬語ではありません。"]}, {"q": "「知らない」「わからない」と相手に伝えるときの正しい表現はどれですか？", "options": ["存じ上げておりません", "わかりません", "存じていません", "知りません"], "answer": 0, "explanations": ["【正解】人を知らない場合は「存じ上げておりません」、事柄を知らない場合は「存じません」を使います。", "【不正解】直接的すぎて冷たい印象を与えます。", "【不正解】「存じておりません」とするのが自然です。", "【不正解】素っ気なく失礼な言い方になります。"]}, {"q": "社内の人に挨拶するときの正しい表現はどれですか？", "options": ["お疲れ様です", "ご苦労様です", "お世話になっております", "お元気様です"], "answer": 0, "explanations": ["【正解】社内の挨拶では、上司・同僚・部下問わず「お疲れ様です」が無難で正しい表現です。", "【不正解】「ご苦労様」は目下が目上に使うとNGな言葉です。", "【不正解】社外の取引先に使う挨拶です。", "【不正解】一般的ではない独自の言葉です。"]}];
+
+        // --- 2. 第二回 上座下座データベース ---
+        const kamizaDB = [{"layoutType": "reception_room", "title": "応接室 (長椅子と1人掛け)", "q": "この応接室における最も上座（1番）はどれですか？", "options": ["A", "B", "C", "D"], "answer": 0, "explanations": ["【正解】ゆったり座れ窓や絵画が見れる長椅子の奥の席（A）かつ入り口から遠い席が最上座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F", "【正解】ゆったり座れ窓や絵画が見れる長椅子の奥の席（A）かつ入り口から遠い席が最上座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F", "【正解】ゆったり座れ窓や絵画が見れる長椅子の奥の席（A）かつ入り口から遠い席が最上座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F", "【正解】ゆったり座れ窓や絵画が見れる長椅子の奥の席（A）かつ入り口から遠い席が最上座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F"]}, {"layoutType": "reception_room", "title": "応接室 (長椅子と1人掛け)", "q": "この応接室における最も下座（6番）はどれですか？", "options": ["C", "D", "E", "F"], "answer": 3, "explanations": ["【正解】入口に最も近く、人の出入りで落ち着かない1人掛けの椅子（F）が最下座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F", "【正解】入口に最も近く、人の出入りで落ち着かない1人掛けの椅子（F）が最下座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F", "【正解】入口に最も近く、人の出入りで落ち着かない1人掛けの椅子（F）が最下座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F", "【正解】入口に最も近く、人の出入りで落ち着かない1人掛けの椅子（F）が最下座です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F"]}, {"layoutType": "meeting_room", "title": "会議室 (対面式)", "q": "自社3名、他社3名で会議をします。お客様側の最上座はどれですか？", "options": ["A", "B", "D", "F"], "answer": 0, "explanations": ["【正解】入口から最も遠い席（A）が最上座となります。続いてB、Cの順です。\n[席順の基本] 最上座:A → B → C(お客様側) → D → E → 最下座:F(自社側)", "【正解】入口から最も遠い席（A）が最上座となります。続いてB、Cの順です。\n[席順の基本] 最上座:A → B → C(お客様側) → D → E → 最下座:F(自社側)", "【正解】入口から最も遠い席（A）が最上座となります。続いてB、Cの順です。\n[席順の基本] 最上座:A → B → C(お客様側) → D → E → 最下座:F(自社側)", "【正解】入口から最も遠い席（A）が最上座となります。続いてB、Cの順です。\n[席順の基本] 最上座:A → B → C(お客様側) → D → E → 最下座:F(自社側)"]}, {"layoutType": "taxi_pro", "title": "タクシー (運転手はプロ)", "q": "お客様を含めて4人で乗車します。最も上座はどれですか？", "options": ["A", "B", "C", "D"], "answer": 1, "explanations": ["【正解】運転席の後ろ（B）が最上座です。最も安全で落ち着く位置とされています。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)", "【正解】運転席の後ろ（B）が最上座です。最も安全で落ち着く位置とされています。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)", "【正解】運転席の後ろ（B）が最上座です。最も安全で落ち着く位置とされています。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)", "【正解】運転席の後ろ（B）が最上座です。最も安全で落ち着く位置とされています。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)"]}, {"layoutType": "taxi_pro", "title": "タクシー (運転手はプロ)", "q": "この中で一番の下座（支払い等を行う人）はどこですか？", "options": ["A", "B", "C", "D"], "answer": 0, "explanations": ["【正解】助手席（A）が最下座です。運転手への道案内や支払いを行います。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)", "【正解】助手席（A）が最下座です。運転手への道案内や支払いを行います。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)", "【正解】助手席（A）が最下座です。運転手への道案内や支払いを行います。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)", "【正解】助手席（A）が最下座です。運転手への道案内や支払いを行います。\n[席順の基本] 最上座:B → D → C → 最下座:A(助手席)"]}, {"layoutType": "company_car", "title": "社用車 (身内が運転)", "q": "自社の社員が運転し、上司やお客様が同乗します。最上座はどこですか？", "options": ["A", "B", "C", "D"], "answer": 0, "explanations": ["【正解】身内が運転する場合は、助手席（A）が最上座となります。（※プロのドライバーが運転するタクシーとは席順が異なるため注意が必要です）\n[席順の基本] 最上座:A(助手席) → B → D → 最下座:C", "【正解】身内が運転する場合は、助手席（A）が最上座となります。（※プロのドライバーが運転するタクシーとは席順が異なるため注意が必要です）\n[席順の基本] 最上座:A(助手席) → B → D → 最下座:C", "【正解】身内が運転する場合は、助手席（A）が最上座となります。（※プロのドライバーが運転するタクシーとは席順が異なるため注意が必要です）\n[席順の基本] 最上座:A(助手席) → B → D → 最下座:C", "【正解】身内が運転する場合は、助手席（A）が最上座となります。（※プロのドライバーが運転するタクシーとは席順が異なるため注意が必要です）\n[席順の基本] 最上座:A(助手席) → B → D → 最下座:C"]}, {"layoutType": "elevator", "title": "エレベーター", "q": "エレベーターに乗る際、一番の下座（操作係）はどこですか？", "options": ["A", "B", "C", "D"], "answer": 1, "explanations": ["【正解】操作盤の前（B）が下座です。乗り降りの補助やボタン操作を行います。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)", "【正解】操作盤の前（B）が下座です。乗り降りの補助やボタン操作を行います。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)", "【正解】操作盤の前（B）が下座です。乗り降りの補助やボタン操作を行います。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)", "【正解】操作盤の前（B）が下座です。乗り降りの補助やボタン操作を行います。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)"]}, {"layoutType": "elevator", "title": "エレベーター", "q": "エレベーター内の最上座はどこですか？", "options": ["A", "B", "C", "D"], "answer": 2, "explanations": ["【正解】操作盤から対角線上で、最も奥（C）が最上座です。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)", "【正解】操作盤から対角線上で、最も奥（C）が最上座です。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)", "【正解】操作盤から対角線上で、最も奥（C）が最上座です。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)", "【正解】操作盤から対角線上で、最も奥（C）が最上座です。\n[席順の基本] 最上座:C(奥) → D → A → 最下座:B(操作盤前)"]}, {"layoutType": "shinkansen", "title": "新幹線 (ボックス席)", "q": "4人で向かい合って座る際、最上座はどこですか？", "options": ["A", "B", "C", "D"], "answer": 0, "explanations": ["【正解】進行方向を向いていて、かつ景色が見える窓側（A）が最上座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)", "【正解】進行方向を向いていて、かつ景色が見える窓側（A）が最上座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)", "【正解】進行方向を向いていて、かつ景色が見える窓側（A）が最上座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)", "【正解】進行方向を向いていて、かつ景色が見える窓側（A）が最上座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)"]}, {"layoutType": "shinkansen", "title": "新幹線 (ボックス席)", "q": "この中で一番の下座はどこですか？", "options": ["A", "B", "C", "D"], "answer": 3, "explanations": ["【正解】進行方向と逆向きで、かつ人が通る通路側のDが最下座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)", "【正解】進行方向と逆向きで、かつ人が通る通路側のDが最下座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)", "【正解】進行方向と逆向きで、かつ人が通る通路側のDが最下座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)", "【正解】進行方向と逆向きで、かつ人が通る通路側のDが最下座です。\n[席順の基本] 最上座:A(進行方向・窓) → B(進行方向・通路) → C(逆向き・窓) → 最下座:D(逆向き・通路)"]}, {"layoutType": "washitsu", "title": "飲食店 (和室)", "q": "床の間がある和室です。最上座はどこですか？", "options": ["A", "C", "D", "F"], "answer": 0, "explanations": ["【正解】床の間の前（床の間に最も近い席A）が最上座です。景色や掛け軸を楽しむ特等席です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)", "【正解】床の間の前（床の間に最も近い席A）が最上座です。景色や掛け軸を楽しむ特等席です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)", "【正解】床の間の前（床の間に最も近い席A）が最上座です。景色や掛け軸を楽しむ特等席です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)", "【正解】床の間の前（床の間に最も近い席A）が最上座です。景色や掛け軸を楽しむ特等席です。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)"]}, {"layoutType": "washitsu", "title": "飲食店 (和室)", "q": "和室における一番の下座はどこですか？", "options": ["C", "D", "E", "F"], "answer": 3, "explanations": ["【正解】出入り口に最も近いFが最下座となり、注文などの世話役を務めます。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)", "【正解】出入り口に最も近いFが最下座となり、注文などの世話役を務めます。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)", "【正解】出入り口に最も近いFが最下座となり、注文などの世話役を務めます。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)", "【正解】出入り口に最も近いFが最下座となり、注文などの世話役を務めます。\n[席順の基本] 最上座:A → B → C → D → E → 最下座:F(出入口側)"]}, {"layoutType": "round_table", "title": "飲食店 (円卓)", "q": "中華料理などの円卓で、最上座はどれですか？", "options": ["A", "B", "D", "F"], "answer": 0, "explanations": ["【正解】入口から最も遠い奥の中央（A）が最上座です。Aを上座とした場合、Aから見て右側のBを2位、左側のCを3位とします。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G", "【正解】入口から最も遠い奥の中央（A）が最上座です。Aを上座とした場合、Aから見て右側のBを2位、左側のCを3位とします。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G", "【正解】入口から最も遠い奥の中央（A）が最上座です。Aを上座とした場合、Aから見て右側のBを2位、左側のCを3位とします。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G", "【正解】入口から最も遠い奥の中央（A）が最上座です。Aを上座とした場合、Aから見て右側のBを2位、左側のCを3位とします。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G"]}, {"layoutType": "round_table", "title": "飲食店 (円卓)", "q": "円卓における第2位の席（上座から2番目）はどこですか？", "options": ["B", "C", "D", "E"], "answer": 0, "explanations": ["【正解】最上座（A）に座った人から見て右側のBが第2位となります。Aを上座とした場合、Aから見て右隣のBを2位、左隣のCを3位とします。以降は左右交互に順位がつきます。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G", "【正解】最上座（A）に座った人から見て右側のBが第2位となります。Aを上座とした場合、Aから見て右隣のBを2位、左隣のCを3位とします。以降は左右交互に順位がつきます。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G", "【正解】最上座（A）に座った人から見て右側のBが第2位となります。Aを上座とした場合、Aから見て右隣のBを2位、左隣のCを3位とします。以降は左右交互に順位がつきます。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G", "【正解】最上座（A）に座った人から見て右側のBが第2位となります。Aを上座とした場合、Aから見て右隣のBを2位、左隣のCを3位とします。以降は左右交互に順位がつきます。\n[席順の基本] 1位:A → 2位:B(右隣) → 3位:C(左隣) → 4位:D → 5位:E → 6位:F → 7位:G"]}, {"layoutType": "sofa_table", "title": "飲食店 (ソファと椅子)", "q": "レストランのテーブル席です。最上座はどこですか？", "options": ["A", "B", "C", "D"], "answer": 0, "explanations": ["【正解】基本は奥のソファ席が上座です。レストランなどの長テーブルでは、入り口や通路から最も遠い奥の席（A）が最上座となります。\n[席順の基本] 最上座:A(奥・ソファ) → B → C → D → E → 最下座:F(通路側)", "【正解】基本は奥のソファ席が上座です。レストランなどの長テーブルでは、入り口や通路から最も遠い奥の席（A）が最上座となります。\n[席順の基本] 最上座:A(奥・ソファ) → B → C → D → E → 最下座:F(通路側)", "【正解】基本は奥のソファ席が上座です。レストランなどの長テーブルでは、入り口や通路から最も遠い奥の席（A）が最上座となります。\n[席順の基本] 最上座:A(奥・ソファ) → B → C → D → E → 最下座:F(通路側)", "【正解】基本は奥のソファ席が上座です。レストランなどの長テーブルでは、入り口や通路から最も遠い奥の席（A）が最上座となります。\n[席順の基本] 最上座:A(奥・ソファ) → B → C → D → E → 最下座:F(通路側)"]}, {"layoutType": "u_shape_room", "title": "会議室 (コの字型・議長あり)", "q": "議長（進行役）がいる会議室での最上座はどこですか？", "options": ["A", "B", "C", "D"], "answer": 0, "explanations": ["【正解】議長から見て右側（図では左側）のAが最上座となります。次いで左側（D）です。\n[席順の基本] 議長 → 最上座:A(右) → D(左) → B(右) → E(左) → C(右) → 最下座:F(左・ドア前)", "【正解】議長から見て右側（図では左側）のAが最上座となります。次いで左側（D）です。\n[席順の基本] 議長 → 最上座:A(右) → D(左) → B(右) → E(左) → C(右) → 最下座:F(左・ドア前)", "【正解】議長から見て右側（図では左側）のAが最上座となります。次いで左側（D）です。\n[席順の基本] 議長 → 最上座:A(右) → D(左) → B(右) → E(左) → C(右) → 最下座:F(左・ドア前)", "【正解】議長から見て右側（図では左側）のAが最上座となります。次いで左側（D）です。\n[席順の基本] 議長 → 最上座:A(右) → D(左) → B(右) → E(左) → C(右) → 最下座:F(左・ドア前)"]}, {"layoutType": "airplane", "title": "飛行機 (3列シート)", "q": "飛行機の3列シートです。最上座はどこですか？", "options": ["A", "B", "C", "どちらでもない"], "answer": 0, "explanations": ["【正解】景色が見え、他人の移動に煩わされない窓側（A）が最上座です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)", "【正解】景色が見え、他人の移動に煩わされない窓側（A）が最上座です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)", "【正解】景色が見え、他人の移動に煩わされない窓側（A）が最上座です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)", "【正解】景色が見え、他人の移動に煩わされない窓側（A）が最上座です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)"]}, {"layoutType": "airplane", "title": "飛行機 (3列シート)", "q": "飛行機の3列シートで、最も下座（3番目）とされるのはどこですか？", "options": ["A(窓側)", "B(中央)", "C(通路側)", "すべて同格"], "answer": 1, "explanations": ["【正解】両側を挟まれて窮屈な中央（B）が一番の下座となります。順番は窓側→通路側→中央です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)", "【正解】両側を挟まれて窮屈な中央（B）が一番の下座となります。順番は窓側→通路側→中央です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)", "【正解】両側を挟まれて窮屈な中央（B）が一番の下座となります。順番は窓側→通路側→中央です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)", "【正解】両側を挟まれて窮屈な中央（B）が一番の下座となります。順番は窓側→通路側→中央です。\n[席順の基本] 最上座:A(窓側) → C(通路側) → 最下座:B(中央)"]}, {"layoutType": "sidewalk", "title": "歩道を歩くとき", "q": "3人で歩道を歩く際、一番の上司やお客様はどこをご案内すべきですか？", "options": ["A", "B", "C", "どこでもよい"], "answer": 2, "explanations": ["【正解】安全のため、車道から最も遠い壁側（C）を上座としてご案内します。\n[席順の基本] 最上座:C(壁側) → B(中央) → 最下座:A(車道側)", "【正解】安全のため、車道から最も遠い壁側（C）を上座としてご案内します。\n[席順の基本] 最上座:C(壁側) → B(中央) → 最下座:A(車道側)", "【正解】安全のため、車道から最も遠い壁側（C）を上座としてご案内します。\n[席順の基本] 最上座:C(壁側) → B(中央) → 最下座:A(車道側)", "【正解】安全のため、車道から最も遠い壁側（C）を上座としてご案内します。\n[席順の基本] 最上座:C(壁側) → B(中央) → 最下座:A(車道側)"]}, {"layoutType": "minivan_taxi", "title": "タクシー (3列シート車)", "q": "3列シートのミニバンタクシーです。座席のうち、最も上座とされるのはどこですか？", "options": ["A", "B", "C", "D"], "answer": 1, "explanations": ["【正解】2列目の運転席の後ろ（B）が最上座です。ゆったり座れるためです。\n[席順の基本] 最上座:B(2列目右) → C(2列目左) → D(3列目右) → F(3列目左) → E(3列目中央) → 最下座:A(助手席)", "【正解】2列目の運転席の後ろ（B）が最上座です。ゆったり座れるためです。\n[席順の基本] 最上座:B(2列目右) → C(2列目左) → D(3列目右) → F(3列目左) → E(3列目中央) → 最下座:A(助手席)", "【正解】2列目の運転席の後ろ（B）が最上座です。ゆったり座れるためです。\n[席順の基本] 最上座:B(2列目右) → C(2列目左) → D(3列目右) → F(3列目左) → E(3列目中央) → 最下座:A(助手席)", "【正解】2列目の運転席の後ろ（B）が最上座です。ゆったり座れるためです。\n[席順の基本] 最上座:B(2列目右) → C(2列目左) → D(3列目右) → F(3列目左) → E(3列目中央) → 最下座:A(助手席)"]}];
+
+        // 全体コース管理
+        const courses = {
+            'keigo': { title: '第一回：基礎敬語トレーニング', db: keigoDB },
+            'kamiza': { title: '第二回：上座下座ビジネスマナー', db: kamizaDB }
+        };
+
+        let currentCourseKey = 'keigo';
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let userAnswers = [];
+        let lastTestAnswers = [];
+        let navHistory = [];
+        let isAnswering = false;
+
+        // 視覚的イラスト図解をレンダリングする関数
+        function renderVisualDiagram(type, title) {
+            if (!type) return '';
+
+            let innerHtml = '';
+            
+            switch (type) {
+                case 'reception_room':
+                    innerHtml = `
+                        <div style="display: flex; justify-content: space-between; align-items: stretch; gap: 8px;">
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">(長椅子・ソファー)</div>
+                                <div class="seat-item">A</div>
+                                <div class="seat-item">B</div>
+                                <div class="seat-item">C</div>
+                            </div>
+                            <div style="flex: 1.2; display: flex; align-items: center; justify-content: center;" class="table-item">ローテーブル</div>
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">(1人掛け椅子)</div>
+                                <div class="seat-item">D</div>
+                                <div class="seat-item">E</div>
+                                <div class="seat-item">F</div>
+                            </div>
+                            <div style="writing-mode: vertical-rl; font-size: 0.75rem; color: #64748b; font-weight: bold; border-right: 2px solid #cbd5e1; padding-right: 4px; display: flex; align-items: center; justify-content: center;">窓・絵画あり</div>
+                        </div>
+                        <div style="text-align: left; margin-top: 12px;"><span class="door-tag">[ドア・入口]</span></div>
+                    `;
+                    break;
+                case 'meeting_room':
+                    innerHtml = `
+                        <div class="wall-tag">[奥] 入口から遠い側</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div class="seat-item">A</div>
+                                <div class="seat-item">B</div>
+                                <div class="seat-item">C</div>
+                            </div>
+                            <div style="flex: 1.2;" class="table-item">会議テーブル</div>
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div class="seat-item">D</div>
+                                <div class="seat-item">E</div>
+                                <div class="seat-item">F</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 12px;"><span class="door-tag">[手前・ドア]</span></div>
+                    `;
+                    break;
+                case 'taxi_pro':
+                    innerHtml = `
+                        <div class="wall-tag">前（進行方向）</div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <div style="flex: 1;" class="seat-item">A (助手席)</div>
+                            <div style="flex: 1;" class="seat-item label-only">運転席 (プロ)</div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: bold; margin-bottom: 4px;">[後部座席]</div>
+                        <div style="display: flex; gap: 6px;">
+                            <div style="flex: 1;" class="seat-item">D</div>
+                            <div style="flex: 1;" class="seat-item">C</div>
+                            <div style="flex: 1;" class="seat-item">B</div>
+                        </div>
+                    `;
+                    break;
+                case 'company_car':
+                    innerHtml = `
+                        <div class="wall-tag">前（進行方向）</div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <div style="flex: 1;" class="seat-item">A (助手席)</div>
+                            <div style="flex: 1;" class="seat-item label-only">運転席 (社員)</div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: bold; margin-bottom: 4px;">[後部座席]</div>
+                        <div style="display: flex; gap: 6px;">
+                            <div style="flex: 1;" class="seat-item">D</div>
+                            <div style="flex: 1;" class="seat-item">C</div>
+                            <div style="flex: 1;" class="seat-item">B</div>
+                        </div>
+                    `;
+                    break;
+                case 'elevator':
+                    innerHtml = `
+                        <div class="wall-tag">[奥]</div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <div style="flex: 1;" class="seat-item">C</div>
+                            <div style="flex: 1;" class="seat-item">D</div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 4px;">
+                            <div style="flex: 1;" class="seat-item">A</div>
+                            <div style="flex: 1;" class="seat-item">B（操作盤前）</div>
+                        </div>
+                        <div style="text-align: right; font-size: 0.75rem; color: #64748b; font-weight: bold; margin-bottom: 6px;">[操作盤]</div>
+                        <div style="text-align: center; border-top: 2px dashed #cbd5e1; padding-top: 6px;">
+                            <span class="door-tag" style="background: #cbd5e1;">【エレベーター扉】</span>
+                        </div>
+                    `;
+                    break;
+                case 'shinkansen':
+                    innerHtml = `
+                        <div class="wall-tag">進行方向 ➡</div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">[窓側]</div>
+                        <div style="display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px;">
+                            <div style="flex: 1;" class="seat-item">A</div>
+                            <div style="flex: 1;" class="seat-item">C</div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">[通路側]</div>
+                        <div style="display: flex; justify-content: space-between; gap: 12px;">
+                            <div style="flex: 1;" class="seat-item">B</div>
+                            <div style="flex: 1;" class="seat-item">D</div>
+                        </div>
+                    `;
+                    break;
+                case 'washitsu':
+                    innerHtml = `
+                        <div class="table-item" style="background: #fde68a; border-color: #d97706; margin-bottom: 10px;">[床の間] (掛け軸・生け花)</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div class="seat-item">A</div>
+                                <div class="seat-item">B</div>
+                                <div class="seat-item">C</div>
+                            </div>
+                            <div style="flex: 1.2;" class="table-item">座卓 (机)</div>
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div class="seat-item">D</div>
+                                <div class="seat-item">E</div>
+                                <div class="seat-item">F</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 12px;"><span class="door-tag">[入口・ふすま]</span></div>
+                    `;
+                    break;
+                case 'round_table':
+                    innerHtml = `
+                        <div class="wall-tag">[奥]</div>
+                        <div style="display: flex; justify-content: center; margin-bottom: 6px;">
+                            <div style="width: 60px;" class="seat-item">A</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <div style="width: 50px;" class="seat-item">B</div>
+                                <div style="width: 50px;" class="seat-item">D</div>
+                                <div style="width: 50px;" class="seat-item">F</div>
+                            </div>
+                            <div style="border-radius: 50%; width: 90px; height: 90px; font-size: 0.8rem;" class="table-item">円卓</div>
+                            <div style="display: flex; flex-direction: column; gap: 6px;">
+                                <div style="width: 50px;" class="seat-item">C</div>
+                                <div style="width: 50px;" class="seat-item">E</div>
+                                <div style="width: 50px;" class="seat-item">G</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 10px;"><span class="door-tag">[入口]</span></div>
+                    `;
+                    break;
+                case 'sofa_table':
+                    innerHtml = `
+                        <div class="wall-tag">[壁側ソファー]</div>
+                        <div style="display: flex; justify-content: space-between; align-items: stretch; gap: 8px;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                                    <div style="flex: 1;" class="seat-item">A</div>
+                                    <div style="flex: 1;" class="seat-item">B</div>
+                                    <div style="flex: 1;" class="seat-item">C</div>
+                                </div>
+                                <div class="table-item">テーブル</div>
+                                <div style="font-size: 0.75rem; color: #64748b; font-weight: bold; margin: 4px 0;">[通路側椅子]</div>
+                                <div style="display: flex; gap: 6px;">
+                                    <div style="flex: 1;" class="seat-item">D</div>
+                                    <div style="flex: 1;" class="seat-item">E</div>
+                                    <div style="flex: 1;" class="seat-item">F</div>
+                                </div>
+                            </div>
+                            <div style="writing-mode: vertical-rl; font-size: 0.75rem; color: #64748b; font-weight: bold; border-left: 2px solid #cbd5e1; padding-left: 4px; display: flex; align-items: center; justify-content: center;">[通路]</div>
+                        </div>
+                    `;
+                    break;
+                case 'u_shape_room':
+                    innerHtml = `
+                        <div style="display: flex; justify-content: center; margin-bottom: 8px;">
+                            <div style="width: 120px;" class="table-item">[議長席]</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; gap: 8px;">
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div class="seat-item">A</div>
+                                <div class="seat-item">B</div>
+                                <div class="seat-item">C</div>
+                            </div>
+                            <div style="flex: 1.2;" class="table-item">コの字卓</div>
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                                <div class="seat-item">D</div>
+                                <div class="seat-item">E</div>
+                                <div class="seat-item">F</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 10px;"><span class="door-tag">[ドア]</span></div>
+                    `;
+                    break;
+                case 'airplane':
+                    innerHtml = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                            <div style="flex: 1; text-align: center;">
+                                <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">[窓側]</div>
+                                <div class="seat-item">A</div>
+                            </div>
+                            <div style="flex: 1; text-align: center;">
+                                <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">[中央]</div>
+                                <div class="seat-item">B</div>
+                            </div>
+                            <div style="flex: 1; text-align: center;">
+                                <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">[通路側]</div>
+                                <div class="seat-item">C</div>
+                            </div>
+                            <div style="flex: 0.8; text-align: center;" class="door-tag">通路</div>
+                        </div>
+                    `;
+                    break;
+                case 'sidewalk':
+                    innerHtml = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                            <div style="flex: 1; background: #cbd5e1; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-align: center;">車道</div>
+                            <div style="flex: 1;" class="seat-item">A</div>
+                            <div style="flex: 1;" class="seat-item">B</div>
+                            <div style="flex: 1;" class="seat-item">C</div>
+                            <div style="flex: 1; background: #94a3b8; color: white; padding: 6px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-align: center;">壁</div>
+                        </div>
+                    `;
+                    break;
+                case 'minivan_taxi':
+                    innerHtml = `
+                        <div class="wall-tag">前（進行方向）</div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                            <div style="flex: 1;" class="seat-item label-only">運転席</div>
+                            <div style="flex: 1;" class="seat-item">A (1列目)</div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">2列目</div>
+                        <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                            <div style="flex: 1;" class="seat-item">C</div>
+                            <div style="flex: 1;" class="seat-item">B</div>
+                        </div>
+                        <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">3列目</div>
+                        <div style="display: flex; gap: 6px;">
+                            <div style="flex: 1;" class="seat-item">F</div>
+                            <div style="flex: 1;" class="seat-item">E</div>
+                            <div style="flex: 1;" class="seat-item">D</div>
+                        </div>
+                    `;
+                    break;
+                default:
+                    return '';
+            }
+
+            return `
+                <div class="diagram-card">
+                    <div style="font-size: 0.85rem; font-weight: bold; color: var(--navy); margin-bottom: 8px;">【視覚配置図：${title}】</div>
+                    <div class="diagram-box">
+                        ${innerHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function prepareQuestionObj(rawQ) {
+            const indices = [0, 1, 2, 3];
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            
+            const shuffledOptions = indices.map(i => rawQ.options[i]);
+            const shuffledExplanations = indices.map(i => rawQ.explanations[i]);
+            const newAnswerIndex = indices.indexOf(rawQ.answer);
+            
+            return {
+                title: rawQ.title || '',
+                layoutType: rawQ.layoutType || null,
+                q: rawQ.q,
+                options: shuffledOptions,
+                explanations: shuffledExplanations,
+                answer: newAnswerIndex,
+                rawQ: rawQ
+            };
+        }
+
+        function pushState(screenId, data = {}) {
+            navHistory.push({ screen: screenId, data: data });
+            renderCurrentState();
+        }
+
+        function popState() {
+            if (navHistory.length > 1) {
+                navHistory.pop();
+                renderCurrentState();
+            }
+        }
+
+        function goBack() {
+            popState();
+        }
+
+        function goToPortal() {
+            navHistory = [{ screen: 'portal-screen', data: {} }];
+            renderCurrentState();
+        }
+
+        function selectCourse(courseKey) {
+            currentCourseKey = courseKey;
+            startTest('random');
+        }
+
+        window.selectCourse = selectCourse;
+        window.goToPortal = goToPortal;
+        window.goBack = goBack;
+        window.pushState = pushState;
+        window.startTest = startTest;
+
+        function renderCurrentState() {
+            const currentState = navHistory[navHistory.length - 1];
+            
+            const backBtn = document.getElementById('btn-back');
+            if (navHistory.length > 1) {
+                backBtn.classList.remove('hidden');
+            } else {
+                backBtn.classList.add('hidden');
+            }
+
+            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+            document.getElementById(currentState.screen).classList.remove('hidden');
+
+            if (currentState.screen === 'portal-screen') {
+                document.getElementById('header-title-text').innerText = "株式会社Wiz27新卒向け　ビジネスマナー練習ポータル";
+            } else {
+                document.getElementById('header-title-text').innerText = courses[currentCourseKey].title;
+            }
+
+            if (currentState.screen === 'quiz-screen') {
+                currentIndex = currentState.data.qIndex;
+                userAnswers = userAnswers.slice(0, currentIndex);
+                isAnswering = false;
+                document.getElementById('instant-feedback-box').style.display = 'none';
+                renderQuestionUI();
+            } else if (currentState.screen === 'result-screen') {
+                renderResultUI();
+            } else if (currentState.screen === 'review-screen') {
+                renderReviewUI();
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startTest(mode) {
+            const db = courses[currentCourseKey].db;
+            userAnswers = [];
+            
+            let selectedRaw = [];
+            if (mode === 'random') {
+                selectedRaw = shuffleArray(db).slice(0, 10);
+            } else if (mode === 'wrong') {
+                const wrongList = lastTestAnswers.filter(ans => !ans.isCorrect);
+                if (wrongList.length === 0) return;
+                selectedRaw = wrongList.map(a => a.questionObj.rawQ);
+            }
+            
+            currentQuestions = selectedRaw.map(prepareQuestionObj);
+            pushState('quiz-screen', { qIndex: 0 });
+        }
+
+        function selectAnswer(optIndex) {
+            if (isAnswering) return; // 既に回答済みの場合は何もしない
+            isAnswering = true;
+            
+            const qObj = currentQuestions[currentIndex];
+            const isCorrect = (optIndex === qObj.answer);
+            
+            userAnswers.push({
+                questionObj: qObj,
+                selected: optIndex,
+                isCorrect: isCorrect
+            });
+
+            // 選択肢のUIを更新
+            const container = document.getElementById('options-container');
+            const items = container.querySelectorAll('.option-item');
+            
+            items.forEach((item, idx) => {
+                if (idx === optIndex) {
+                    item.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+                }
+                if (idx === qObj.answer && !isCorrect) {
+                    item.classList.add('correct-answer');
+                }
+            });
+
+            // フィードバック表示
+            const feedbackBox = document.getElementById('instant-feedback-box');
+            const feedbackHeader = document.getElementById('feedback-header');
+            const feedbackDesc = document.getElementById('feedback-desc');
+            
+            feedbackBox.className = 'feedback-box ' + (isCorrect ? 'correct' : 'wrong');
+            
+            if (isCorrect) {
+                feedbackHeader.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> 正解！';
+            } else {
+                feedbackHeader.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> 不正解...';
+            }
+            
+            feedbackDesc.innerText = qObj.explanations[qObj.answer].replace("【正解】", "");
+            feedbackBox.style.display = 'block';
+
+            // 次へボタンのイベントリスナー設定
+            const nextBtn = document.getElementById('btn-next-question');
+            nextBtn.onclick = () => {
+                if (currentIndex + 1 < currentQuestions.length) {
+                    pushState('quiz-screen', { qIndex: currentIndex + 1 });
+                } else {
+                    lastTestAnswers = [...userAnswers];
+                    pushState('result-screen');
+                }
+            };
+            
+            // フィードバックまでスクロール
+            setTimeout(() => {
+                feedbackBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function renderQuestionUI() {
+            const qObj = currentQuestions[currentIndex];
+            const total = currentQuestions.length;
+            
+            document.getElementById('quiz-progress-text').innerText = `QUESTION ${currentIndex + 1} / ${total}`;
+            const percent = (currentIndex / total) * 100;
+            document.getElementById('quiz-progress-fill').style.width = `${percent}%`;
+            
+            const tagBox = document.getElementById('question-tag-box');
+            if (qObj.title) {
+                tagBox.innerHTML = `<span class="question-title-tag">${qObj.title}</span>`;
+            } else {
+                tagBox.innerHTML = '';
+            }
+
+            document.getElementById('question-text').innerText = qObj.q;
+            
+            // 図解の表示
+            const diagramContainer = document.getElementById('diagram-container');
+            if (qObj.layoutType) {
+                diagramContainer.innerHTML = renderVisualDiagram(qObj.layoutType, qObj.title);
+            } else {
+                diagramContainer.innerHTML = '';
+            }
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            
+            const labels = ['①', '②', '③', '④'];
+            qObj.options.forEach((opt, idx) => {
+                const div = document.createElement('div');
+                div.className = 'option-item';
+                div.onclick = () => selectAnswer(idx);
+                
+                div.innerHTML = `
+                    <div class="option-label">${labels[idx]}</div>
+                    <div class="option-text">${opt}</div>
+                `;
+                container.appendChild(div);
+            });
+            
+            setTimeout(() => {
+                const currentPercent = ((currentIndex + 1) / total) * 100;
+                document.getElementById('quiz-progress-fill').style.width = `${currentPercent}%`;
+            }, 50);
+        }
+
+        function renderResultUI() {
+            const correctCount = userAnswers.filter(ans => ans.isCorrect).length;
+            const total = currentQuestions.length;
+            
+            document.getElementById('score-display').innerHTML = `${correctCount}<span>/${total}</span>`;
+            
+            let msg = "";
+            const rate = correctCount / total;
+            if (rate === 1) msg = "完璧です！この調子で10月のマナーテスト8割以上クリアを目指しましょう！";
+            else if (rate >= 0.8) msg = "合格ライン（8割）達成です！間違えた部分の復習でさらに完璧にしましょう。";
+            else msg = "合格ライン（8割）まであと少し！解説で理由を確認し着実に身につけましょう。";
+            document.getElementById('result-message').innerText = msg;
+            
+            const wrongCard = document.getElementById('action-wrong-card');
+            if (correctCount === total) {
+                wrongCard.style.display = 'none';
+            } else {
+                wrongCard.style.display = 'block';
+            }
+        }
+
+        function renderReviewUI() {
+            const container = document.getElementById('review-container');
+            container.innerHTML = '';
+            
+            const labels = ['①', '②', '③', '④'];
+            
+            userAnswers.forEach((ans, idx) => {
+                const qObj = ans.questionObj;
+                const div = document.createElement('div');
+                div.className = 'review-item';
+                
+                const badgeClass = ans.isCorrect ? 'status-correct' : 'status-wrong';
+                const badgeText = ans.isCorrect ? 'CORRECT (正解)' : 'INCORRECT (不正解)';
+                
+                let expHtml = '';
+                qObj.options.forEach((opt, optIdx) => {
+                    const isUserAns = (optIdx === ans.selected);
+                    const isCorrectAns = (optIdx === qObj.answer);
+                    
+                    let icon = '<span class="exp-icon icon-neutral">・</span>';
+                    let labelTag = '';
+                    
+                    if (isUserAns && isCorrectAns) {
+                        icon = '<span class="exp-icon icon-correct">✓</span>';
+                        labelTag = '<span style="font-size: 0.75rem; background: var(--success); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">あなたの回答 (正解)</span>';
+                    } else if (isUserAns) {
+                        icon = '<span class="exp-icon icon-wrong">✗</span>';
+                        labelTag = '<span style="font-size: 0.75rem; background: var(--danger); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">あなたの回答</span>';
+                    } else if (isCorrectAns) {
+                        icon = '<span class="exp-icon icon-correct">✓</span>';
+                        labelTag = '<span style="font-size: 0.75rem; background: var(--gold); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">正解</span>';
+                    }
+                    
+                    expHtml += `
+                        <div class="exp-row">
+                            ${icon}
+                            <div class="exp-content">
+                                <span style="font-weight: bold; margin-right: 4px;">${labels[optIdx]}.</span>
+                                <span style="font-weight: 500;">${opt}</span>
+                                ${labelTag}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                let diagramHtml = '';
+                if (qObj.layoutType) {
+                    diagramHtml = renderVisualDiagram(qObj.layoutType, qObj.title);
+                }
+                
+                div.innerHTML = `
+                    <div class="status-badge ${badgeClass}">${badgeText}</div>
+                    <div class="question-text serif" style="font-size: 1.1rem; margin-bottom: 12px;">Q${idx + 1}. ${qObj.q}</div>
+                    ${diagramHtml}
+                    <div style="margin-top: 10px; margin-bottom: 16px;">
+                        ${expHtml}
+                    </div>
+                    <div class="exp-box">
+                        <div style="font-weight: bold; color: var(--navy); margin-bottom: 6px;">【解説】</div>
+                        <div class="exp-desc">${qObj.explanations[qObj.answer].replace("【正解】", "")}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.onload = () => {
+            goToPortal();
+        };
+    </script>
+</body>
+</html>
